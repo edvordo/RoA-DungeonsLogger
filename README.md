@@ -10,7 +10,7 @@ At the point of screenshot I made it to dungeon level 2 and have visited these r
 
 ![DungLogger ingame](http://i.imgur.com/XNAv1sH.png "This is what DL will look like in your game")
 
- * Red do indicates places there are mobs to fight
+ * Red dot indicates places there are mobs to fight
  * Yellow dot is a room you have not yet searched
  * White dot is, obviously, you :o)
 
@@ -43,4 +43,5 @@ As per usual with user scripts, install Tampermonkey for chrome or Greasemonkey 
 ## FAQ
 
  * **I installed and nothing was added to the page?**
+
 First of, make sure you refreshed the game as well after installing! When done, enter the dungeons and try and scroll the main area ( where info about events in dungeon rooms is, **not** the one on right side of the game with map ), you should see a small square ( 10 b 10 pixels ) with a white dot in it. :) Thats the script working. Also try and enlarge that area so you can better see the generated map. :)
