@@ -2,6 +2,8 @@
 The basic idea of this script is, that it will try and log your movement around the dungeons
 and create a map of the rooms you've visited alongside with some helpfull info.
 
+[![](http://i.imgur.com/NjU8JYl.png "Click to install ^^")](https://github.com/edvordo/RoA-DungeonsLogger/raw/master/RoADungeons.user.js)
+
 ## Preview
 This is a preview of the script in working.
 At the point of screenshot I made it to dungeon level 2 and have visited these rooms
