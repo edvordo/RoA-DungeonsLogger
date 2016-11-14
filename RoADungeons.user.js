@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         RoA - dungeon logger
 // @namespace    Reltorakii_is_awesome
-// @version      0.2
+// @version      0.2.1
 // @description  Tracks your movement around dungeon and generates a map for visited rooms
 // @author       Reltorakii
 // @downloadURL  https://github.com/edvordo/RoA-DungeonsLogger/raw/master/RoADungeons.user.js
@@ -17,10 +17,10 @@
 
     /**********************************************************/
     /*              NO NEEDD TO EDIT FURTHER                  */
-    /*   ABOVE SETTING WILL BE CARIED OVER SCRIPT UPDATES     */
+    /*  ABOVE SETTING WILL NOT BE CARIED OVER SCRIPT UPDATES  */
     /**********************************************************/
 
-    var WALL_COLOR = typeof localStorage !== "undefined" && localStorage.getItem("WALL_COLOR") !== null && () ? localStorage.WALL_COLOR : (localStorage.setItem("WALL_COLOR", MY_WALL_COLOR),MY_WALL_COLOR);
+    var WALL_COLOR = MY_WALL_COLOR;
 
     var dungeon         = localStorage.getItem("dungeon");
         dungeon         = dungeon === null ? {r:{},cf:0,ct:null} : JSON.parse(dungeon);
