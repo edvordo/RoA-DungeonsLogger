@@ -1,9 +1,11 @@
 // ==UserScript==
 // @name         RoA - dungeon logger
 // @namespace    Reltorakii_is_awesome
-// @version      0.1
+// @version      0.2
 // @description  Tracks your movement around dungeon and generates a map for visited rooms
 // @author       Reltorakii
+// @downloadURL  https://github.com/edvordo/RoA-DungeonsLogger/raw/master/RoADungeons.user.js
+// @updateURL    https://github.com/edvordo/RoA-DungeonsLogger/raw/master/RoADungeons.user.js
 // @match        https://*.avabur.com/game.php
 // @grant        none
 // ==/UserScript==
@@ -11,10 +13,23 @@
 (function() {
     'use strict';
 
+    var MY_WALL_COLOR = "#ff0000";
+
+    /**********************************************************/
+    /*              NO NEEDD TO EDIT FURTHER                  */
+    /*   ABOVE SETTING WILL BE CARIED OVER SCRIPT UPDATES     */
+    /**********************************************************/
+
+    var WALL_COLOR = typeof localStorage !== "undefined" && localStorage.getItem("WALL_COLOR") !== null && () ? localStorage.WALL_COLOR : (localStorage.setItem("WALL_COLOR", MY_WALL_COLOR),MY_WALL_COLOR);
+
     var dungeon         = localStorage.getItem("dungeon");
-        dungeon         = dungeon === null ? {r:{},pt:null,ct:null} : JSON.parse(dungeon);
+        dungeon         = dungeon === null ? {r:{},cf:0,ct:null} : JSON.parse(dungeon);
     function x(e, res, req, jsonres) {
         if (jsonres.hasOwnProperty("data") && jsonres.data.hasOwnProperty("map")) {
+            if (dungeon.cf !== jsonres.data.floor) {
+                dungeon.r = {};
+                dungeon.cf = jsonres.data.floor;
+            }
             var jrd = jsonres.data;
             var data = {};
             var token = $(jrd.map).text().replace("↓", "v"); // map
@@ -62,7 +77,7 @@
             localStorage.setItem("dungeon", JSON.stringify(dungeon));
             updateDungeonMap(false);
         } else {
-            updateDungeonMap(true);
+            updateDungeonMap(req.url.indexOf("dungeon_") === -1);
         }
     }
 
@@ -70,18 +85,27 @@
     function updateDungeonMap(hide) {
         var d = JSON.parse(JSON.stringify(dungeon));
         if ($("#dungeonMapCanvas").length === 0) {
+            var h = $("<div>")
+                .attr("id", "dMCW")
+                .css({position:"absolute",top:0,left:0})
+                .addClass("border2 ui-component")
+                .appendTo("body");
             $("<canvas>").attr({
                 id: "dungeonMapCanvas",
-                width: "600",
-                height: "600"
-            }).appendTo("#dungeonWrapper");
+                width: "325",
+                height: "325"
+            }).appendTo("#dMCW");
+            h.draggable({handle:"#dungeonMapCanvas"}).resizable({stop:function(e,d){$("#dungeonMapCanvas").attr({width:d.size.width,height:d.size.height});updateDungeonMap(false);}});
             dmc = document.getElementById("dungeonMapCanvas");
             dmctx = dmc.getContext("2d");
         }
         if (hide === false) {
+            $("#dMCW").show();
             dmv = [];
             dmctx.clearRect(0,0,dmc.width,dmc.height);
             drawTile(d.ct, Math.floor(dmc.width/2), Math.floor(dmc.height/2), 1);
+        } else {
+            $("#dMCW").hide();
         }
     }
 
@@ -148,7 +172,7 @@
 
     function drawTileWall(x,y,which, blocked) {
         if (blocked) {
-            dmctx.strokeStyle = "#ff0000";
+            dmctx.strokeStyle = WALL_COLOR;
             dmctx.fillStyle   = "#ffffff";
         } else {
             dmctx.strokeStyle = "#333";
